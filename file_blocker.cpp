@@ -28,7 +28,7 @@ int main(int argc, char * argv[])
 		if (GetModuleFileName(NULL, app_path_buffer, MAX_PATH) == 0)
 		{
 			std::cout << "Error: Failed get file path\n";
-			return;
+			return 1;
 		}
 
 		std::wstring app_path_wstring = app_path_buffer;
@@ -59,5 +59,7 @@ int main(int argc, char * argv[])
 	}
 
 	CloseHandle(h_file);
+
+	return 0;
 }
  
