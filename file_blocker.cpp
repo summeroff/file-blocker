@@ -39,6 +39,9 @@ int main(int argc, char * argv[])
 			}
 			checked_params += 1;
 			continue;
+		} else {
+			checked_params += 1;
+			continue;
 		}
 	}
 
@@ -46,19 +49,18 @@ int main(int argc, char * argv[])
 	std::cout << "Hello there! Gonna lock this file for " << locking_time_out << "sec \n";
 
 	OVERLAPPED overlapvar = { 0 };
+	wchar_t app_path_buffer[MAX_PATH + 1];
+	if (GetModuleFileName(NULL, app_path_buffer, MAX_PATH) == 0)
+	{
+		std::cout << "Error: Failed get file path\n";
+		return 1;
+	}
+
+	std::wstring app_path_wstring = app_path_buffer;
 
 	if (use_extended_locking)
 	{
-		wchar_t app_path_buffer[MAX_PATH + 1];
-		if (GetModuleFileName(NULL, app_path_buffer, MAX_PATH) == 0)
-		{
-			std::cout << "Error: Failed get file path\n";
-			return 1;
-		}
-
-		std::wstring app_path_wstring = app_path_buffer;
-		std::cout << "Run file: \"" << std::string(app_path_wstring.begin(), app_path_wstring.end()) << "\" (only block writing and deleting )\n";
-
+		std::cout << "Run file: \"" << std::string(app_path_wstring.begin(), app_path_wstring.end()) << "\" (block writing and deleting )\n";
 		std::cout << "Lock file: \"" << std::string(app_path_wstring.begin(), app_path_wstring.end()) << "\" (block reading too)\n";
 
 		h_file = CreateFile(app_path_buffer, GENERIC_READ, 0, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
@@ -74,6 +76,8 @@ int main(int argc, char * argv[])
 		{
 			std::cout << "Error: Failed to lock file\n";
 		}
+	} else {
+		std::cout << "Run file: \"" << std::string(app_path_wstring.begin(), app_path_wstring.end()) << "\" (only block writing and deleting )\n";
 	}
 
 	//wait 
