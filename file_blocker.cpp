@@ -7,6 +7,8 @@
 
 bool use_extended_locking = false;
 int  locking_time_out = 30;
+bool print_help = false;
+bool exit_after_help = false;
 
 int main(int argc, char * argv[])
 {
@@ -26,7 +28,7 @@ int main(int argc, char * argv[])
 		}
 		else if (param_name.compare("-t") == 0)
 		{
-			if (argc >= checked_params + 1)
+			if (argc > checked_params + 1)
 			{
 				std::string param_value(argv[checked_params + 1]);
 				try
@@ -39,9 +41,34 @@ int main(int argc, char * argv[])
 			}
 			checked_params += 1;
 			continue;
-		} else {
+		}
+		else if (param_name.compare("-h") == 0)
+		{
+			print_help = true;
+			exit_after_help = true;
 			checked_params += 1;
 			continue;
+		}
+		else
+		{
+			std::cout << "Unknown param: " << param_name << " \n";
+			print_help = true;
+			checked_params += 1;
+			continue;
+		}
+	}
+	
+	if(print_help)
+	{
+		std::cout << "Application will run and block its exe file from change. \n\n";
+		std::cout << "Options: \n";
+		std::cout << "\t -l : use LockFileEx to lock file \n";
+		std::cout << "\t -t N : set timeout for app in seconds \n";
+		std::cout << "\t -h : print help \n";
+
+		if (exit_after_help)
+		{
+			return 0;
 		}
 	}
 
@@ -76,7 +103,9 @@ int main(int argc, char * argv[])
 		{
 			std::cout << "Error: Failed to lock file\n";
 		}
-	} else {
+	}
+	else
+	{
 		std::cout << "Run file: \"" << std::string(app_path_wstring.begin(), app_path_wstring.end()) << "\" (only block writing and deleting )\n";
 	}
 
