@@ -1,5 +1,5 @@
 # file-blocker
-Simple console app that can be used to test use case when file access blocked by other process. 
+Simple console app that can be used to test usecase when file access blocked by other process. 
 
 
 ## Build 
