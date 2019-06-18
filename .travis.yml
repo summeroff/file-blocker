@@ -1,5 +1,4 @@
 os: windows
-language: cpp
 
 before_script:
   - mkdir build
