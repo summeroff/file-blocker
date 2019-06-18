@@ -6,4 +6,6 @@ before_script:
   - cd build
   - cmake -G "Visual Studio 15 2017 Win64"  ../   
 
-script: cmake --build . --target ALL_BUILD --config Release -- /p:CharacterSet=Unicode
+script: 
+  - cd build 
+  - cmake --build . --target ALL_BUILD --config Release -- /p:CharacterSet=Unicode
