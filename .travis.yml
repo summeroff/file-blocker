@@ -1,6 +1,12 @@
 os: windows
 language: cpp
 
+env:
+  global:
+   # The next declaration is the encrypted COVERITY_SCAN_TOKEN, created
+   #   via the "travis encrypt" command using the project repo's public key
+   - secure: "dvPfrYW+lb7WTgKLat563D3lcDkRjIulkaCuFI4ISYbhwgJfDYRN9DP2oGcP5zE2sF5e4g0pS4XKfcOYeMMcjktwNg3h5CJWiFfOu8wVtcot153NgnWDv9tFesLy7ImPSXRw0OkwMeXqrlUpLOjJZVfR8Ya368YBdchWrXVb4+8xDzxPOd1Lv5JSuTKhLLoqOffeFRwL65s1QeZdQkONc++erFpS9NWrvqMoIBSLp1oBOO8BcccdQamz7BGLGwBsekHpIEYpdcCrpo2XwdepvDhjoM4JB8gEf7YK11pS0iC9IrP9MlYrpZC7FvmCfl9hDa1No4Iyw4kqIcy8oSB5dYEAUKIivYud/uwP0ZxmvuiY+BpkZMcfz7D2Y/vDkx5l3J0hm/hTd67QgCP3nJnyBwSnn2mr4o5MSdXnDlYnkVqE1oFvvtnxbWKgNEojMrv0EV40jHiqBkWNMzAof908Nv+fvvVAmt3VRD1KkKr/kSeYnDQFS7d7FYn10nfU9wvs1qh+TB1org3MLo+vUJcoAKWsYTJpyQi1+LbQnvOns2Z+qUyiJ7ozvUl6N2+bubp4Npwwg4mc2VADxfCG6RIj/VXBwUrcPjpb7TuFxhO8M5GvbSsFLETz72T3ZCmyJI1QVm6ykrLhR6Tmqp3nO5vQhVZCXMXZEKlAEXEZIMXVKJc="
+   
 before_script:
   - mkdir build
   - cd build
@@ -8,3 +14,16 @@ before_script:
 
 script: 
   - cmake --config Release --build .
+
+before_install:
+  - echo -n | openssl s_client -connect https://scan.coverity.com:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | sudo tee -a /etc/ssl/certs/ca-
+
+addons:
+  coverity_scan:
+    project:
+      name: "summeroff/file-blocker"
+      description: "<Your project description here>"
+    notification_email: summeroff@gmail.com
+    build_command_prepend: "<Your build preprocessing command here>"
+    build_command: "<Your build command here>"
+    branch_pattern: coverity_scan
